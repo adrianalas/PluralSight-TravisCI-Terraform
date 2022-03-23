@@ -64,15 +64,20 @@ jobs:
 
       install:
         # Download and install terraform before each run
-        - sudo apt install unzip
-        - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
-        - unzip terraform_"$tf_version"_linux_amd64.zip
-        - sudo mv terraform /usr/local/bin/
-        - rm terraform_"$tf_version"_linux_amd64.zip
+        #- sudo apt install unzip
+        #- wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
+        #- unzip terraform_"$tf_version"_linux_amd64.zip
+        #- sudo mv terraform /usr/local/bin/
+        #- rm terraform_"$tf_version"_linux_amd64.zip
+        ## change default config for terraform install
+        - sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+        - curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+        - sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+        - sudo apt-get update && sudo apt-get install terraform
 
       script:
         - echo "Merge detected, executing changes"
 
         # Terraform init and then apply changes to environment
-        - terraform init
+        - terraform init $tf_init_cli_options
         - terraform apply $tf_apply_cli_options
