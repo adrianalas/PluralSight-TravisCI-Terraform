@@ -74,5 +74,5 @@ jobs:
         - echo "Merge detected, executing changes"
 
         # Terraform init and then apply changes to environment
-        - terraform init $tf_init_cli_options
+        - terraform init -input=false
         - terraform apply $tf_apply_cli_options
